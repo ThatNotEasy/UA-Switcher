@@ -4,18 +4,18 @@
   "version": "1.0",
   "description": "Switch between different user agents and view the current UA string",
   "icons": {
-    "16": "icons/ua.jpg",
-    "32": "icons/ua.jpg",
-    "48": "icons/ua.jpg",
-    "128": "icons/ua.jpg"
+    "16": "icons/icon.png",
+    "32": "icons/icon.png",
+    "48": "icons/icon.png",
+    "128": "icons/icon.png"
   },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/ua.jpg",
-      "32": "icons/ua.jpg",
-      "48": "icons/ua.jpg",
-      "128": "icons/ua.jpg"
+      "16": "icons/icon.png",
+      "32": "icons/icon.png",
+      "48": "icons/icon.png",
+      "128": "icons/icon.png"
     }
   },
   "permissions": [
