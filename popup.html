@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      width: 350px;
+      padding: 15px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+    h2 {
+      margin-top: 0;
+      color: #4285f4;
+      font-size: 18px;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    button {
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #3367d6;
+    }
+    .tab {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    .tab-buttons {
+      display: flex;
+      margin-bottom: 10px;
+      gap: 5px;
+    }
+    .tab-button {
+      flex: 1;
+      padding: 8px;
+      background: #eee;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    .tab-button.active {
+      background: #4285f4;
+      color: white;
+    }
+    .status {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 4px;
+      display: none;
+      font-size: 13px;
+    }
+    .success {
+      background-color: #e6f4ea;
+      color: #137333;
+    }
+    .error {
+      background-color: #fce8e6;
+      color: #c5221f;
+    }
+    #currentAgentContainer {
+      margin-top: 15px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    #currentAgent {
+      word-break: break-all;
+      font-size: 12px;
+      color: #333;
+      max-height: 100px;
+      overflow-y: auto;
+      padding: 8px;
+      background: white;
+      border-radius: 3px;
+      margin-top: 5px;
+      font-family: monospace;
+    }
+    .ua-label {
+      font-weight: bold;
+      font-size: 13px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h2>User Agent Switcher</h2>
+  
+  <div class="tab-buttons">
+    <button class="tab-button active" onclick="openTab('preset')">Preset</button>
+    <button class="tab-button" onclick="openTab('custom')">Custom</button>
+  </div>
+  
+  <div id="preset" class="tab active">
+    <!-- Fixed to be dropdown: size removed -->
+    <select id="userAgentSelect" style="width: 100%; margin-bottom: 10px;">
+      <option value="">-- Select User Agent --</option>
+    </select>
+    <button id="applyPreset">Apply User Agent</button>
+    <button id="resetPreset">Reset to Default</button>
+  </div>
+  
+  <div id="custom" class="tab">
+    <input type="text" id="customUserAgent" placeholder="Enter custom user agent string">
+    <button id="applyCustom">Apply Custom User Agent</button>
+    <button id="resetCustom">Reset to Default</button>
+  </div>
+  
+  <div id="statusMessage" class="status"></div>
+  
+  <div id="currentAgentContainer">
+    <div class="ua-label">Current User Agent:</div>
+    <div id="currentAgent"></div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
