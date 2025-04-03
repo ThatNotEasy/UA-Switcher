@@ -45,6 +45,7 @@ async function loadUserAgents() {
 document.addEventListener('DOMContentLoaded', () => {
   loadUserAgents();
 
+  // Preset: Apply UA
   document.getElementById('applyPreset').addEventListener('click', () => {
     const selectedUA = document.getElementById('userAgentSelect').value;
     if (!selectedUA) {
@@ -56,23 +57,84 @@ document.addEventListener('DOMContentLoaded', () => {
       if (response.success) {
         showStatus('User Agent applied successfully', 'success');
         updateCurrentAgentDisplay(selectedUA);
-        refreshAllTabs(); // 🔄 Refresh all tabs
+        refreshAllTabs();
       } else {
         showStatus('Failed to set User Agent', 'error');
       }
     });
   });
 
+  // Preset: Reset to default
   document.getElementById('resetPreset').addEventListener('click', () => {
     chrome.runtime.sendMessage({ action: 'resetUserAgent' }, (response) => {
       if (response.success) {
         showStatus('Reset to default User Agent', 'success');
         updateCurrentAgentDisplay(navigator.userAgent);
-        refreshAllTabs(); // 🔄 Refresh all tabs after reset
+        refreshAllTabs();
       } else {
         showStatus('Failed to reset User Agent', 'error');
       }
     });
+  });
+
+  // Custom: Apply custom UA
+  document.getElementById('applyCustom').addEventListener('click', () => {
+    const customUAInput = document.getElementById('customUserAgent');
+    const customUA = customUAInput.value.trim();
+
+    if (!customUA) {
+      showStatus('Please enter a custom user agent', 'error');
+      customUAInput.focus();
+      customUAInput.style.borderColor = 'red';
+      return;
+    }
+
+    customUAInput.style.borderColor = ''; // reset border if valid
+
+    chrome.runtime.sendMessage({ action: 'setUserAgent', userAgent: customUA }, (response) => {
+      if (response.success) {
+        showStatus('Custom User Agent applied successfully', 'success');
+        updateCurrentAgentDisplay(customUA);
+        refreshAllTabs();
+      } else {
+        showStatus('Failed to set User Agent', 'error');
+      }
+    });
+  });
+
+  // Custom: Reset to default
+  document.getElementById('resetCustom').addEventListener('click', () => {
+    chrome.runtime.sendMessage({ action: 'resetUserAgent' }, (response) => {
+      if (response.success) {
+        showStatus('Reset to default User Agent', 'success');
+        updateCurrentAgentDisplay(navigator.userAgent);
+        refreshAllTabs();
+      } else {
+        showStatus('Failed to reset User Agent', 'error');
+      }
+    });
+  });
+});
+
+document.querySelectorAll('.tab-button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.getAttribute('data-tab');
+
+    // Deactivate all tabs and buttons
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+
+    // Activate the selected tab and button
+    document.getElementById(target).classList.add('active');
+    btn.classList.add('active');
+
+    // Focus the input when switching to custom tab
+    if (target === 'custom') {
+      setTimeout(() => {
+        const input = document.getElementById('customUserAgent');
+        input.focus();
+      }, 50);
+    }
   });
 });
 
@@ -101,7 +163,9 @@ function openTab(tabName) {
 function refreshAllTabs() {
   chrome.tabs.query({}, (tabs) => {
     for (let tab of tabs) {
-      if (tab.id && tab.url &&
+      if (
+        tab.id &&
+        tab.url &&
         !tab.url.startsWith("chrome://") &&
         !tab.url.startsWith("chrome-extension://")
       ) {
